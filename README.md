@@ -56,14 +56,8 @@ k6 run tests/transferencias.test.js
 Para acompanhar o teste em tempo real via navegador e gerar um relatório HTML automaticamente ao final:
 
 ```bash
-K6_WEB_DASHBOARD=true K6_WEB_DASHBOARD_EXPORT=reports/html-report.html k6 run tests/transferencias.test.js
+K6_WEB_DASHBOARD=true K6_WEB_DASHBOARD_EXPORT=/html-report.html k6 run tests/transferencias.test.js
 ```
-Para apenas rodar um teste:
-
-```bash
-k6 run tests/login.test.js
-```
-
 
 - Acesse o relatório gerado abrindo `html-report.html` em seu navegador.
 - Esse modo permite uma análise mais visual e detalhada da performance.
