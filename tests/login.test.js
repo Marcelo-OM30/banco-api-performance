@@ -1,7 +1,7 @@
 import http from 'k6/http';
 import { sleep, check } from 'k6';
 const postLogin = JSON.parse(open('../fixtures/postLogin.json'));
-
+const baseUrl = __ENV.BASE_URL__ || 'http://localhost:3000';
 export const options = {
     stages: [
         { duration: '5s', target: 10 },
@@ -16,8 +16,7 @@ export const options = {
 
 // The default exported function is gonna be picked up by k6 as the entry point for the test script. It will be executed repeatedly in "iterations" for the whole duration of the test.
 export default function () {
-    const url = 'http://localhost:3000/login';
-    console.log(postLogin)
+    const url = `${baseUrl}/login`;
     const payload = JSON.stringify(postLogin);
 
     const params = {
