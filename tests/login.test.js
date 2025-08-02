@@ -1,0 +1,36 @@
+import http from 'k6/http';
+import { sleep, check } from 'k6';
+const postLogin = JSON.parse(open('../fixtures/postLogin.json'));
+const baseUrl = __ENV.BASE_URL__ || 'http://localhost:3000';
+export const options = {
+    stages: [
+        { duration: '5s', target: 10 },
+        { duration: '20s', target: 10 },
+        { duration: '5s', target: 0 },
+    ],
+    thresholds: {
+        http_req_duration: ['p(90)<3000', 'max<5000'],
+        http_req_failed: ['rate<0.01'],
+    }
+};
+
+// The default exported function is gonna be picked up by k6 as the entry point for the test script. It will be executed repeatedly in "iterations" for the whole duration of the test.
+export default function () {
+    const url = `${baseUrl}/login`;
+    const payload = JSON.stringify(postLogin);
+
+    const params = {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+
+    const res = http.post(url, payload, params);
+
+    check(res, {
+        'Validar que o status é 200': (r) => r.status === 200,
+        'Validar que o token é uma string': (r) => typeof r.json().token === 'string',
+    });
+
+    sleep(1);
+}
